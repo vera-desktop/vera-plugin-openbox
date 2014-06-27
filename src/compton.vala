@@ -90,6 +90,10 @@ namespace OpenboxPlugin {
 					// Double
 					new_variant = new Variant("(sd)", new_key, val.get_double());
 					break;
+				case "i":
+					// int32
+					new_variant = new Variant("(si)", new_key, val.get_int32());
+					break;
 				default:
 					// Breaking
 					message("Returning...");
