@@ -19,6 +19,20 @@
  *     Eugenio "g7" Paolantonio <me@medesimo.eu>
 */
 
+/*
+ * Currently compton supports the on-the-fly change of the following properties:
+ * 
+ * fade_delta
+ * fade_in_step
+ * fade_out_step
+ * no_fading_openclose
+ * uredir_if_possible
+ * clear_shadow
+ * track_focus
+ * vsync
+ * redirected_force
+*/
+
 namespace OpenboxPlugin {
 
 	public class Compton : Object {
@@ -59,11 +73,22 @@ namespace OpenboxPlugin {
 			
 			message("Processing %s", key);
 			
+			// Properties have underscores instead of a dash
+			string new_key = key.replace("-","_");
+			
 			switch (val.get_type_string()) {
 				
 				case "s":
 					// String
-					new_variant = new Variant("(ss)", key, val.get_string());
+					new_variant = new Variant("(ss)", new_key, val.get_string());
+					break;
+				case "b":
+					// Boolean
+					new_variant = new Variant("(sb)", new_key, val.get_boolean());
+					break;
+				case "d":
+					// Double
+					new_variant = new Variant("(sd)", new_key, val.get_double());
 					break;
 				default:
 					// Breaking
@@ -114,9 +139,7 @@ namespace OpenboxPlugin {
 				"com.github.chjj.compton",
 				null
 			);
-			
-			this.on_settings_changed("vsync");
-			
+						
 		}
 		
 	}

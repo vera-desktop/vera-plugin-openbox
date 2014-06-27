@@ -97,7 +97,7 @@
 		</key>
 
 		<key name="shadow-exclude" type="as">
-			<default>[""]</default>
+			<default>[]</default>
 			<summary>Shadow exclude</summary>
 			<description>Exclude conditions for shadows.</description>
 		</key>
@@ -178,7 +178,7 @@
 		</key>
 
 		<key name="blur-background-exclude" type="as">
-			<default>[""]</default>
+			<default>[]</default>
 			<summary>Blur background exclude</summary>
 			<description>Exclude conditions for background blur.</description>
 		</key>
@@ -214,7 +214,7 @@
 		</key>
 
 		<key name="fade-exclude" type="as">
-			<default>[""]</default>
+			<default>[]</default>
 			<summary>Fade exclude</summary>
 			<description>Exclude conditions for fading.</description>
 		</key>
