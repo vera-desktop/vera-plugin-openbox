@@ -26,10 +26,12 @@ namespace OpenboxPlugin {
 
 	public class Plugin : Peas.ExtensionBase, VeraPlugin {
 
-		private string HOME = Environ.get_variable(null, "HOME");
+		private string HOME = Environment.get_home_dir();
 
 		public Display display;
 		public Settings settings;
+
+		private Compton compton;
 		
 		private void on_process_terminated(Pid pid, int status) {
 			/**
@@ -48,6 +50,8 @@ namespace OpenboxPlugin {
 			
 			try {
 				this.display = display;
+				
+				this.compton = new Compton();
 					
 				//this.settings = new Settings("org.semplicelinux.vera.tint2");
 
@@ -66,6 +70,7 @@ namespace OpenboxPlugin {
 			*/
 			
 			if (phase == StartupPhase.WM) {
+								
 				// Launch openbox.
 				Pid pid;
 				
