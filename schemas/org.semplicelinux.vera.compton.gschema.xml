@@ -220,7 +220,7 @@ Giuseppe "GsCRuL3Z" Corti <giuseppe@infiniteloop.pro>
 			</choices>
 			<default>"glx"</default>
 			<summary>Fade exclude</summary>
-			<description>Backend to use: "xrender" or "glx". GLX backend is typically much faster but depends on a sane driver.</description>
+			<description>Backend to use: 'xrender' or 'glx'. GLX backend is typically much faster but depends on a sane driver.</description>
 		</key>
 
 		<key name="mark-wmwin-focused" type="b">
@@ -264,7 +264,7 @@ Giuseppe "GsCRuL3Z" Corti <giuseppe@infiniteloop.pro>
 			</choices>
 			<default>"none"</default>
 			<summary>Vsync</summary>
-			<description>"none", "drm", "opengl", "opengl-oml", "opengl-swc", "opengl-mswc"</description>
+			<description>'none', 'drm', 'opengl', 'opengl-oml', 'opengl-swc', 'opengl-mswc'</description>
 		</key>
 
 		<key name="dbe" type="b">
@@ -286,7 +286,7 @@ Giuseppe "GsCRuL3Z" Corti <giuseppe@infiniteloop.pro>
 		</key>
 
 		<key name="focus-exclude" type="as">
-			<default>[""]</default>
+			<default>[]</default>
 			<summary>Focus exclude</summary>
 			<description>A list of conditions of windows that should always be considered focused.</description>
 		</key>
@@ -304,7 +304,7 @@ Giuseppe "GsCRuL3Z" Corti <giuseppe@infiniteloop.pro>
 		</key>
 
 		<key name="invert-color-include" type="as">
-			<default>[""]</default>
+			<default>[]</default>
 			<summary>Invert color include</summary>
 			<description>Conditions for windows to be painted with inverted color.</description>
 		</key>
