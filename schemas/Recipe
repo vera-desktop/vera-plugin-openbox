@@ -19,7 +19,7 @@
 #     Giuseppe "GsCRuL3Z" Corti <giuseppe@infiniteloop.pro>
 #
 
-data.vera {
+data.schemas {
     gsettings-schemas = org.semplicelinux.vera.compton.gschema.xml
     gettext-domain = vera
 }
