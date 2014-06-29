@@ -1,0 +1,18 @@
+Source: vera-plugin-openbox
+Section: x11
+Priority: optional
+Maintainer: Eugenio Paolantonio (g7) <me@medesimo.eu>
+Build-Depends: debhelper (>= 8.0.0), build-essential, bake, libvera-dev,
+ libgee-dev, libpeas-dev, libgtk-3-dev, valac-0.24
+Standards-Version: 3.9.5
+Homepage: https://semplice-linux.org/
+Vcs-Git: https://github.com/vera-desktop/vera-plugin-openbox.git
+Vcs-Browser: https://github.com/vera-desktop/vera-plugin-openbox
+
+Package: vera-plugin-openbox
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, vera-desktop, openbox
+Recommends: compton
+Description: vera openbox plugin
+ vera-openbox-plugin is a vera-desktop plugin that handles communication
+ with the openbox window manager.
