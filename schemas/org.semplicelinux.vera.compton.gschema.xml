@@ -25,7 +25,19 @@
 
 <schemalist>
 
-	<schema path="/org/semplicelinux/vera/compton/" id="org.semplicelinux.vera.compton" gettext-domain="vera">
+	<schema path="/org/semplicelinux/vera/compton/" id="org.semplicelinux.vera.compton" gettext-domain="vera-plugin-openbox">
+
+		<key name="enable-visual-effects" type="b">
+			<default>false</default>
+			<summary>Visual effects enabled</summary>
+			<description>Self-explanatory.</description>
+		</key>
+		
+		<key string="configuration-file" type="s">
+			<default>~/.config/compton.conf</default>
+			<summary>Compton configuration file</summary>
+			<description>The configuration file of compton.</description>
+		</key>
 
 		<key name="shadow" type="b">
 			<default>false</default>
