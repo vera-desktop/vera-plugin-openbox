@@ -60,6 +60,22 @@ namespace OpenboxPlugin {
 			 * We will make compton aware of the change via DBus.
 			*/
 			
+			// Process non-compton keys...
+			if (key == "enable-visual-effects") {
+				// Enable visual effects.
+				
+				// TODO: Should really put something here.
+				return;
+			} else if (key == "configuration-file") {
+				// Configuration file.
+				
+				this.compton_settings.configuration_file = this.settings.get_string(key);
+				this.compton_settings.reload();
+				this.syncronize_dconf();
+				
+				return;
+			}
+			
 			/*
 			 * We need to create a new Variant composed of the key and
 			 * the value.
@@ -187,7 +203,7 @@ namespace OpenboxPlugin {
 			this.settings = new Settings("org.semplicelinux.vera.compton");
 			
 			// Read compton settings
-			this.compton_settings = new ComptonConfiguration("/home/g7/.config/compton.conf");
+			this.compton_settings = new ComptonConfiguration(this.settings.get_string("configuration-file"));
 			
 			// Syncronize dconf with the compton.conf
 			this.syncronize_dconf();
