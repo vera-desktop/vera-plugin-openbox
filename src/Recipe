@@ -23,6 +23,7 @@ libraries.openbox {
 	install-directory = $(options.library-directory)/vera/plugins
 	sources = \
 		openbox.vala \
+		ComptonConfiguration.vala \
 		compton.vala
 	compile-flags = -fPIC
 	
