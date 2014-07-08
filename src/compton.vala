@@ -46,9 +46,11 @@ namespace OpenboxPlugin {
 		*/
 		
 		// Ugly but works.
-		private string DISPLAY = Environment.get_variable("DISPLAY").replace(":","").split(".")[0];
+		//private string DISPLAY = Environment.get_variable("DISPLAY").replace(":","_").replace(".","_");
+		private string DISPLAY = Environment.get_variable("DISPLAY").replace(":","_").split(".")[0];
 		
 		private Settings settings;
+		private ComptonConfiguration compton_settings;
 		private DBusProxy compton_proxy;
 		
 		private void on_settings_changed(string key) {
@@ -57,6 +59,22 @@ namespace OpenboxPlugin {
 			 * 
 			 * We will make compton aware of the change via DBus.
 			*/
+			
+			// Process non-compton keys...
+			if (key == "enable-visual-effects") {
+				// Enable visual effects.
+				
+				// TODO: Should really put something here.
+				return;
+			} else if (key == "configuration-file") {
+				// Configuration file.
+				
+				this.compton_settings.configuration_file = this.settings.get_string(key);
+				this.compton_settings.reload();
+				this.syncronize_dconf();
+				
+				return;
+			}
 			
 			/*
 			 * We need to create a new Variant composed of the key and
@@ -112,6 +130,59 @@ namespace OpenboxPlugin {
 			*/
 		}
 		
+		private void syncronize_dconf() {
+			/**
+			 * This method syncronizes the contents of the settings
+			 * in dconf with the configuration in this.compton_settings.
+			*/
+			
+			Variant val;
+			foreach (string key in this.settings.list_keys()) {
+				
+				val = this.settings.get_value(key);
+				
+				switch (val.get_type_string()) {
+					case "s":
+						// String
+						
+						string? result = this.compton_settings.get_string(key);
+						
+						if (result != null && result != val.get_string())
+							this.settings.set_string(key, result);
+						
+						break;
+					case "b":
+						// Boolean
+						
+						bool? result = this.compton_settings.get_bool(key);
+						
+						if (result != null && result != val.get_boolean())
+							this.settings.set_boolean(key, result);
+						
+						break;
+					case "d":
+						// Double
+						
+						double? result = this.compton_settings.get_double(key);
+						
+						if (result != null && result != val.get_double())
+							this.settings.set_double(key, result);
+						
+						break;
+					case "i":
+						// int32
+						
+						int? result = this.compton_settings.get_int(key);
+						
+						if (result != null && result != val.get_int32())
+							this.settings.set_int(key, result);
+						
+						break;
+				}
+			}
+			
+		}
+		
 		public Compton() {
 			/**
 			 * Constructs the object.
@@ -130,7 +201,16 @@ namespace OpenboxPlugin {
 			*/
 						
 			this.settings = new Settings("org.semplicelinux.vera.compton");
-
+			
+			// Read compton settings
+			this.compton_settings = new ComptonConfiguration(this.settings.get_string("configuration-file"));
+			
+			// Syncronize dconf with the compton.conf
+			this.syncronize_dconf();
+			
+			
+			this.compton_settings.dump(this.settings);
+			
 			// Ensure we are aware when settings change...
 			this.settings.changed.connect(this.on_settings_changed);
 			
@@ -138,12 +218,11 @@ namespace OpenboxPlugin {
 				BusType.SESSION,
 				DBusProxyFlags.NONE,
 				null,
-				"com.github.chjj.compton._" + DISPLAY,
+				"com.github.chjj.compton." + DISPLAY,
 				"/",
 				"com.github.chjj.compton",
 				null
 			);
-						
 		}
 		
 	}
