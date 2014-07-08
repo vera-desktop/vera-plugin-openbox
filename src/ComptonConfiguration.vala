@@ -23,6 +23,7 @@
  * FIXMEs:
  *  - Maybe create a DBus service to reload() the configuration?
  *  - Bind libconfig to vala and remove the uglyness in this files
+ *  - A way to change only what's needed instead of rewriting the entire file?
 */
 
 namespace OpenboxPlugin {
@@ -122,6 +123,19 @@ namespace OpenboxPlugin {
 			} else {
 				return null;
 			}
+		}
+		
+		public void dump(Settings settings) {
+			/**
+			 * Writes the new configuration in the configuration_file.
+			*/
+			
+			/*
+			foreach (string key in settings.list_keys()) {
+				message("%s %s", key, settings.get_string(key));
+			}
+			*/
+			
 		}
 		
 		private string? read_line_from_stream(DataInputStream stream) throws IOError {

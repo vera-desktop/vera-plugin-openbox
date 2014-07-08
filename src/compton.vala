@@ -208,6 +208,9 @@ namespace OpenboxPlugin {
 			// Syncronize dconf with the compton.conf
 			this.syncronize_dconf();
 			
+			
+			this.compton_settings.dump(this.settings);
+			
 			// Ensure we are aware when settings change...
 			this.settings.changed.connect(this.on_settings_changed);
 			
