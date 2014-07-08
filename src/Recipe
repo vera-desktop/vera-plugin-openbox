@@ -28,6 +28,6 @@ libraries.openbox {
 	compile-flags = -fPIC
 	
 	vala-packages = gee-1.0 libpeas-1.0 gdk-3.0 vera x11
-	packages = gee-1.0 libpeas-1.0 gdk-3.0 x11
+	packages = gee-1.0 libpeas-1.0 gdk-3.0 vera x11
 
 }
