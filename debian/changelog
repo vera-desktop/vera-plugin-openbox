@@ -1,3 +1,9 @@
+vera-plugin-openbox (0.20-2) devel; urgency=medium
+
+  * Build-depend on libvera-vapi.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 08 Jul 2014 16:49:08 +0200
+
 vera-plugin-openbox (0.20-1) devel; urgency=low
 
   * Initial release 
