@@ -92,6 +92,14 @@ namespace OpenboxPlugin {
 			
 		}
 		
+		public void shutdown() {
+			/**
+			 * Shutdown method, that will not do anything because
+			 * this plugin is not meant to be hot-unloaded.
+			*/
+			
+		}
+		
 
 	}
 }

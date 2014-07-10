@@ -25,7 +25,8 @@ libraries.openbox {
 		openbox.vala \
 		ComptonConfiguration.vala \
 		compton.vala
-	compile-flags = -fPIC
+	compile-flags = -O2 -flto
+	link-flags = -flto -Wl,--as-needed
 	
 	vala-packages = gee-1.0 libpeas-1.0 gdk-3.0 vera x11
 	packages = gee-1.0 libpeas-1.0 gdk-3.0 vera x11
