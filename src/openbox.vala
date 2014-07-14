@@ -27,6 +27,11 @@ namespace OpenboxPlugin {
 	public class Plugin : Peas.ExtensionBase, VeraPlugin {
 
 		private string HOME = Environment.get_home_dir();
+		
+		/* FIXME: Maybe something configurable? */
+		private string openbox_config_file = Path.build_filename(
+			Environment.get_home_dir(), ".config/vera/openbox", "rc.xml"
+		);
 
 		public Display display;
 		public Settings settings;
@@ -70,14 +75,38 @@ namespace OpenboxPlugin {
 			*/
 			
 			if (phase == StartupPhase.WM) {
-								
+				
+				/* Check for openbox_config_file */
+				try {
+					
+					if (!FileUtils.test(this.openbox_config_file, FileTest.EXISTS)) {
+						/* If it doesn't exist, copy from the data directory */
+						File origin = File.new_for_path("/usr/share/vera-plugin-openbox/rc.xml");
+						File destination = File.new_for_path(this.openbox_config_file);
+						
+						/* Create target directory if it doesn't exist */
+						File destination_directory = destination.get_parent();
+						if (!destination_directory.query_exists())
+							destination_directory.make_directory_with_parents();
+						
+						origin.copy(destination, FileCopyFlags.NONE);
+					}
+					
+				} catch (Error e) {
+					
+					warning("Unable to check for the existence of the Openbox configuration file.");
+					this.openbox_config_file = "/usr/share/vera-plugin-openbox/rc.xml";
+					
+				}
+				
+				
 				// Launch openbox.
 				Pid pid;
 				
 				try {
 					Process.spawn_async(
 						this.HOME,
-						{ "openbox" },
+						{ "openbox", "--config-file", this.openbox_config_file },
 						Environ.get(),
 						SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD,
 						null,
