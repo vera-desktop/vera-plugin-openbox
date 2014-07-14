@@ -16,10 +16,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # Authors:
+#     Eugenio "g7" Paolantonio <me@medesimo.eu>
 #     Giuseppe "GsCRuL3Z" Corti <giuseppe@infiniteloop.pro>
 #
 
 data.plugin {
     files = openbox.plugin
-	install-directory = $(options.library-directory)/vera/plugins
+    install-directory = $(options.library-directory)/vera/plugins
+}
+
+data.openbox-config {
+    files = rc.xml menu-static.xml
+    install-directory = $(options.project-data-directory)
 }
