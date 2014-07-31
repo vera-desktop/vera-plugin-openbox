@@ -262,18 +262,18 @@ running on Semplice Linux.
     </keybind>
     <keybind key="Print">
       <action name="Execute">
-        <execute>xfce4-screenshooter -f</execute>
+        <execute>vera-command --screenshot</execute>
       </action>
     </keybind>
     <keybind key="A-Print">
       <action name="Execute">
-        <execute>xfce4-screenshooter -w</execute>
+        <execute>vera-command --window-screenshot</execute>
       </action>
     </keybind>
-    <!-- keybind for last action via semplice-logout -->
+    <!-- keybind for last exit action -->
     <keybind key="C-A-space">
       <action name="Execute">
-        <execute>semplice-logout --last</execute>
+        <execute>vera-command --ninja-shortcut</execute>
       </action>
     </keybind>
     <!-- Keybindings for window switching -->
