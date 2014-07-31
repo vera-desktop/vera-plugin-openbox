@@ -1,3 +1,10 @@
+vera-plugin-openbox (0.24-1) devel; urgency=medium
+
+  * rc.xml: switch from semplice-logout and
+    xfce4-screenshooter to vera-command.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 01 Aug 2014 00:29:20 +0200
+
 vera-plugin-openbox (0.23-1) devel; urgency=medium
 
   * Added default openbox configurations, directly taken from
