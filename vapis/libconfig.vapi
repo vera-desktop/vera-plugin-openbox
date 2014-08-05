@@ -1,5 +1,5 @@
 /*
- * vera-xsettings.vapi - vala bindings for libvera-xsettings
+ * libconfig.vapi - vala bindings for libconfig
  * Copyright (C) 2014  Eugenio "g7" Paolantonio and the Semplice Project
  * 
  * This library is free software; you can redistribute it and/or
@@ -87,19 +87,19 @@ namespace LibConfig {
 		public string get_string();
 		
 		[CCode (cname = "config_setting_set_int")]
-		public int set_int(int val);
+		public bool set_int(int val);
 		
 		[CCode (cname = "config_setting_set_int64")]
-		public int64 set_int64(int64 val);
+		public bool set_int64(int64 val);
 		
 		[CCode (cname = "config_setting_set_float")]
-		public float set_float(float val);
+		public bool set_float(float val);
 		
 		[CCode (cname = "config_setting_set_bool")]
 		public bool set_bool(bool val);
 		
 		[CCode (cname = "config_setting_set_string")]
-		public string set_string(string val);
+		public bool set_string(string val);
 		
 	}
 	
