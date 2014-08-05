@@ -146,7 +146,7 @@ namespace OpenboxPlugin {
 			*/
 		}
 		
-		private void syncronize_dconf() {
+		private void syncronize_dconf(bool reverse = false) {
 			/**
 			 * This method syncronizes the contents of the settings
 			 * in dconf with the configuration in this.compton_settings.
@@ -155,47 +155,88 @@ namespace OpenboxPlugin {
 			Variant val;
 			foreach (string key in this.settings.list_keys()) {
 				
+				if (key == "enable-visual-effects" || key == "configuration-file") {
+					/* Skip */
+					continue;
+				}
+				
 				val = this.settings.get_value(key);
 				
 				switch (val.get_type_string()) {
 					case "s":
 						// String
 						
-						string? result = this.compton_settings.get_string(key);
+						if (!reverse) {
 						
-						if (result != null && result != val.get_string())
-							this.settings.set_string(key, result);
+							string? result = this.compton_settings.get_string(key);
+							
+							if (result != null && result != val.get_string())
+								this.settings.set_string(key, result);
+								
+						} else {
+							
+							this.compton_settings.set_string(key, val.get_string());
+							
+						}
 						
 						break;
 					case "b":
 						// Boolean
 						
-						bool? result = this.compton_settings.get_bool(key);
+						if (!reverse) {
+							
+							bool? result = this.compton_settings.get_bool(key);
+							
+							if (result != null && result != val.get_boolean())
+								this.settings.set_boolean(key, result);
 						
-						if (result != null && result != val.get_boolean())
-							this.settings.set_boolean(key, result);
+						} else {
+							
+							this.compton_settings.set_bool(key, val.get_boolean());
+							
+						}
 						
 						break;
 					case "d":
 						// Double
 						
-						double? result = this.compton_settings.get_double(key);
+						if (!reverse) {
+							
+							double? result = this.compton_settings.get_double(key);
+							
+							if (result != null && result != val.get_double())
+								this.settings.set_double(key, result);
 						
-						if (result != null && result != val.get_double())
-							this.settings.set_double(key, result);
+						} else {
+							
+							this.compton_settings.set_double(key, val.get_double());
+							
+						} 
 						
 						break;
 					case "i":
 						// int32
 						
-						int? result = this.compton_settings.get_int(key);
+						if (!reverse) {
+							
+							int? result = this.compton_settings.get_int(key);
+							
+							if (result != null && result != val.get_int32())
+								this.settings.set_int(key, result);
 						
-						if (result != null && result != val.get_int32())
-							this.settings.set_int(key, result);
+						} else {
+							
+							this.compton_settings.set_int(key, val.get_int32());
+							
+						}
 						
 						break;
 				}
 			}
+			
+			if (reverse)
+				/* Dump */
+				this.compton_settings.dump();
 			
 		}
 		
@@ -219,10 +260,34 @@ namespace OpenboxPlugin {
 			this.settings = new Settings("org.semplicelinux.vera.compton");
 			
 			// Read compton settings
-			this.compton_settings = new ComptonConfiguration(this.settings.get_string("configuration-file"));
+			string configuration_file = this.settings.get_string("configuration-file").replace(
+				"~",
+				Environment.get_home_dir()
+			);
+			
+			bool initial_setup = false;
+			if (!FileUtils.test(configuration_file, FileTest.EXISTS)) {
+				/* Create empty file */
+				
+				try {
+					File file = File.new_for_path(configuration_file);
+					if (!file.get_parent().query_exists()) {
+						file.get_parent().make_directory_with_parents();
+					}
+					
+					file.create(FileCreateFlags.NONE);
+				} catch (Error e) {
+					warning(e.message);
+					return;
+				}
+				
+				initial_setup = true;
+			}
+				
+			this.compton_settings = new ComptonConfiguration(configuration_file);
 			
 			// Syncronize dconf with the compton.conf
-			this.syncronize_dconf();
+			this.syncronize_dconf(initial_setup);
 						
 			// Ensure we are aware when settings change...
 			this.settings.changed.connect(this.on_settings_changed);
