@@ -22,8 +22,6 @@
 /*
  * FIXMEs:
  *  - Maybe create a DBus service to reload() the configuration?
- *  - Bind libconfig to vala and remove the uglyness in this files
- *  - A way to change only what's needed instead of rewriting the entire file?
 */
 
 namespace OpenboxPlugin {
@@ -37,10 +35,12 @@ namespace OpenboxPlugin {
 		 * When a setting is changed via the public API, it will be
 		 * automatically written back in the configuration file.
 		*/
-		
-		private HashTable<string, string> settings = new HashTable<string, string> (str_hash, str_equal);
+				
+		public bool enabled { get; private set; }
 		
 		public string configuration_file {get; set;}
+		
+		public LibConfig.Config configuration_object;
 		
 		public ComptonConfiguration(string configuration_file) {
 			/**
@@ -49,177 +49,207 @@ namespace OpenboxPlugin {
 			
 			this.configuration_file = configuration_file;
 			
+			this.configuration_object = LibConfig.Config();
+			
 			this.reload();
+			
+		}
+		
+		public LibConfig.Setting lookup_or_create(string key, LibConfig.SettingType type) {
+			/**
+			 * Lookups for the key, and if it doesn't exist, it creates
+			 * a new one.
+			 * 
+			 * It returns the found (or newly created) key or, if an
+			 * error occurred, null.
+			*/
+			
+			LibConfig.Setting result = this.configuration_object.lookup(key);
+			
+			if (result == null) {
+				/* Not found */
+				result = this.configuration_object.get_root_setting().add(
+					key,
+					type
+				);
+			}
+			
+			return result;
+			
+		}
+
+		public void reload() {
+			/**
+			 * (Re)loads the configuration.
+			*/
+			
+			/* There aren't methods in vala to expand user's path. WTF */
+			configuration_file = this.configuration_file.replace(
+				"~",
+				Environment.get_home_dir()
+			);
+						
+			if (!this.configuration_object.read_file(configuration_file)) {
+				/* Error */
+				warning("Unable to read compton configuration file %s.", configuration_file);
+				this.enabled = false;
+				
+				return;
+			} else {
+				this.enabled = true;
+			}
 			
 		}
 		
 		public bool? get_bool(string key) {
 			/**
-			 * Reads the key from the HashTable, and returns its value
+			 * Reads the key, and returns its value
 			 * as a boolean.
 			 * 
-			 * If the key is not into the settings HashTable, or the key
-			 * is not associated with a boolean, this method will return
-			 * null.
+			 * If the key doesn't exists, it'll return null.
 			*/
 			
-			bool result = false;
-			if (settings.contains(key) && bool.try_parse(settings.get(key), out result)) {
-				return result;
-			} else {
+			if (!this.enabled) return null;
+			
+			LibConfig.Setting setting = this.configuration_object.lookup(key);
+			
+			if (setting != null)
+				return setting.get_bool();
+			else
 				return null;
+		}
+		
+		public void set_bool(string key, bool value) {
+			/**
+			 * Stores the value in the configuration file.
+			*/
+			
+			if (!this.enabled) return;
+			
+			LibConfig.Setting setting = this.lookup_or_create(key, LibConfig.SettingType.BOOL);
+			
+			if (!(setting != null && setting.set_bool(value))) {
+				warning("Unable to set key %s in the compton configuration file.", key);
 			}
 		}
 		
 		public string? get_string(string key) {
 			/**
-			 * Reads the key from the HashTable, and returns its value.
+			 * Reads the key, and returns its value.
 			 * 
-			 * If the key is not into the settings HashTable, this method
-			 * will return null.
+			 * If the key doesn't exists, it'll return null.
 			*/
 			
-			if (settings.contains(key)) {
-				return settings.get(key);
-			} else {
+			if (!this.enabled) return null;
+			
+			LibConfig.Setting setting = this.configuration_object.lookup(key);
+			
+			if (setting != null)
+				return setting.get_string();
+			else
 				return null;
+		}
+
+		public void set_string(string key, string value) {
+			/**
+			 * Stores the value in the configuration file.
+			*/
+			
+			if (!this.enabled) return;
+			
+			LibConfig.Setting setting = this.lookup_or_create(key, LibConfig.SettingType.STRING);
+			
+			if (!(setting != null && setting.set_string(value))) {
+				warning("Unable to set key %s in the compton configuration file.", key);
+			}
+		}	
+
+		public int? get_int(string key) {
+			/**
+			 * Reads the key, and returns its value
+			 * as an integer.
+			 * 
+			 * If the key doesn't exists, it'll return null.
+			*/
+			
+			if (!this.enabled) return null;
+			
+			LibConfig.Setting setting = this.configuration_object.lookup(key);
+			
+			if (setting != null)
+				return setting.get_int();
+			else
+				return null;
+		}
+
+		public void set_int(string key, int value) {
+			/**
+			 * Stores the value in the configuration file.
+			*/
+			
+			if (!this.enabled) return;
+			
+			LibConfig.Setting setting = this.lookup_or_create(key, LibConfig.SettingType.INT);
+			
+			if (!(setting != null && setting.set_int(value))) {
+				warning("Unable to set key %s in the compton configuration file.", key);
 			}
 		}
 		
-		public int? get_int(string key) {
-			/**
-			 * Reads the key from the HashTable, and returns its value
-			 * as an integer.
-			 * 
-			 * If the key is not into the settings HashTable this method
-			 * will return null.
-			 * 
-			 * If the key is not associated to an integer, it will return
-			 * 0. This is unfortunately a limit of the gint type.
-			 * Please ensure that you're actually reading an integer
-			 * before using this method.
-			*/
-			
-			if (settings.contains(key)) {
-				return int.parse(settings.get(key));
-			} else {
-				return null;
-			}
-		}
 		
 		public double? get_double(string key) {
 			/**
-			 * Reads the key from the HashTable, and returns its value
+			 * Reads the key, and returns its value
 			 * as a double.
 			 * 
-			 * If the key is not into the settings HashTable, or the key
-			 * is not associated with a double, this method will return
-			 * null.
+			 * If the key doesn't exists, it'll return null.
 			*/
 			
-			double result = 0.0;
-			if (settings.contains(key) && double.try_parse(settings.get(key), out result)) {
-				return result;
-			} else {
+			if (!this.enabled) return null;
+			
+			LibConfig.Setting setting = this.configuration_object.lookup(key);
+			
+			if (setting != null)
+				return setting.get_float();
+			else
 				return null;
+		}
+
+		public void set_double(string key, double value) {
+			/**
+			 * Stores the value in the configuration file.
+			*/
+			
+			if (!this.enabled) return;
+			
+			LibConfig.Setting setting = this.lookup_or_create(key, LibConfig.SettingType.FLOAT);
+			
+			if (!(setting != null && setting.set_float((float)value))) {
+				warning("Unable to set key %s in the compton configuration file.", key);
 			}
 		}
 		
-		public void dump(Settings settings) {
+		
+		public void dump() {
 			/**
 			 * Writes the new configuration in the configuration_file.
 			*/
 			
-			/*
-			foreach (string key in settings.list_keys()) {
-				message("%s %s", key, settings.get_string(key));
-			}
-			*/
+			if (!this.enabled) return;
 			
-		}
-		
-		private string? read_line_from_stream(DataInputStream stream) throws IOError {
-			/**
-			 * Convenience method to read a string without cluttering too
-			 * much the while loop used to populate the HashTable.
-			*/
-			
-			string line;
-			//line = stream.read_until(";", null, null);
-			//line = stream.read_line_utf8(null);
-			line = stream.read_line(null);
-			
-			if (line == null)
-				return null;
+			/* There aren't methods in vala to expand user's path. WTF */
+			configuration_file = this.configuration_file.replace(
+				"~",
+				Environment.get_home_dir()
+			);
 						
-			line = line.replace(" ","").replace("\r","").replace("\"","");
-			
-			if (line.has_prefix("#")) {
-				return "";
-			} else if (!line.has_suffix(";")) {
-				/*
-				 * line doesn't end with ;, so we will read the next
-				 * line and append it to the one we have read here.
-				 * 
-				 * NOTE: Some complex settings like
-				 * wintypes:
-				 * {
-				 *   tooltip = { fade = true; shadow = false; opacity = 0.75; };
-				 * };
-				 * 
-				 * will not work and will only create some useless keys
-				 * in the HashTable, but we aren't going to support them
-				 * (and neither did paranoid) so we can take the risk.
-				 * 
-				 * This entire file is pretty hacky, by the way.
-				*/
+			if (!this.configuration_object.write_file(configuration_file)) {
+				/* Error */
+				warning("Unable to write to the compton configuration file %s.", configuration_file);
 				
-				string _new = this.read_line_from_stream(stream);
-				if (_new != null)
-					line += _new;
-			} else {
-				line = line.replace(";","");
-			}
-						
-			return line;
-		}
-		
-		public void reload() {
-			/**
-			 * Reloads the configuration file.
-			*/
-			
-			// Clean
-			this.settings.remove_all();
-			
-			// Open file
-			File file = File.new_for_path(this.configuration_file);
-			
-			if (!file.query_exists()) {
-				// Uh oh
-				warning("compton configuration file %s not found!", this.configuration_file);
 				return;
 			}
-			
-			// Populate the HashTable
-			try {
-				DataInputStream stream = new DataInputStream(file.read());
-				
-				string line;
-				string[] splt;
-				while ((line = read_line_from_stream(stream)) != null) {
-										
-					splt = line.split("=");
-					
-					if (line == "" || splt[1] == null)
-						continue;
-					
-					this.settings.insert(splt[0], splt[1]);
-					message("Inserted %s. (value %s)", splt[0], splt[1]);
-				}
-			} catch (Error e) {
-				warning("Unable to read the compton configuration file.");
-			}
+						
 		}
 	}
 			
