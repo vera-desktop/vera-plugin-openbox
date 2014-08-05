@@ -22,8 +22,6 @@
 /*
  * FIXMEs:
  *  - Maybe create a DBus service to reload() the configuration?
- *  - Bind libconfig to vala and remove the uglyness in this files
- *  - A way to change only what's needed instead of rewriting the entire file?
 */
 
 namespace OpenboxPlugin {
@@ -37,10 +35,12 @@ namespace OpenboxPlugin {
 		 * When a setting is changed via the public API, it will be
 		 * automatically written back in the configuration file.
 		*/
-		
-		private HashTable<string, string> settings = new HashTable<string, string> (str_hash, str_equal);
+				
+		public bool enabled { get; private set; }
 		
 		public string configuration_file {get; set;}
+		
+		public LibConfig.Config configuration_object;
 		
 		public ComptonConfiguration(string configuration_file) {
 			/**
@@ -49,13 +49,38 @@ namespace OpenboxPlugin {
 			
 			this.configuration_file = configuration_file;
 			
+			this.configuration_object = LibConfig.Config();
+			
 			this.reload();
+			
+		}
+
+		public void reload() {
+			/**
+			 * (Re)loads the configuration.
+			*/
+			
+			/* There aren't methods in vala to expand user's path. WTF */
+			configuration_file = this.configuration_file.replace(
+				"~",
+				Environment.get_home_dir()
+			);
+						
+			if (!this.configuration_object.read_file(this.configuration_file)) {
+				/* Error */
+				warning("Unable to read compton configuration file %s.", this.configuration_file);
+				this.enabled = false;
+				
+				return;
+			} else {
+				this.enabled = true;
+			}
 			
 		}
 		
 		public bool? get_bool(string key) {
 			/**
-			 * Reads the key from the HashTable, and returns its value
+			 * Reads the key, and returns its value
 			 * as a boolean.
 			 * 
 			 * If the key is not into the settings HashTable, or the key
@@ -63,32 +88,37 @@ namespace OpenboxPlugin {
 			 * null.
 			*/
 			
-			bool result = false;
-			if (settings.contains(key) && bool.try_parse(settings.get(key), out result)) {
-				return result;
-			} else {
+			if (!this.enabled) return null;
+			
+			LibConfig.Setting setting = this.configuration_object.lookup(key);
+			
+			if (setting != null)
+				return setting.get_bool();
+			else
 				return null;
-			}
 		}
 		
 		public string? get_string(string key) {
 			/**
-			 * Reads the key from the HashTable, and returns its value.
+			 * Reads the key, and returns its value.
 			 * 
 			 * If the key is not into the settings HashTable, this method
 			 * will return null.
 			*/
 			
-			if (settings.contains(key)) {
-				return settings.get(key);
-			} else {
+			if (!this.enabled) return null;
+			
+			LibConfig.Setting setting = this.configuration_object.lookup(key);
+			
+			if (setting != null)
+				return setting.get_string();
+			else
 				return null;
-			}
 		}
 		
 		public int? get_int(string key) {
 			/**
-			 * Reads the key from the HashTable, and returns its value
+			 * Reads the key, and returns its value
 			 * as an integer.
 			 * 
 			 * If the key is not into the settings HashTable this method
@@ -100,16 +130,19 @@ namespace OpenboxPlugin {
 			 * before using this method.
 			*/
 			
-			if (settings.contains(key)) {
-				return int.parse(settings.get(key));
-			} else {
+			if (!this.enabled) return null;
+			
+			LibConfig.Setting setting = this.configuration_object.lookup(key);
+			
+			if (setting != null)
+				return setting.get_int();
+			else
 				return null;
-			}
 		}
 		
 		public double? get_double(string key) {
 			/**
-			 * Reads the key from the HashTable, and returns its value
+			 * Reads the key, and returns its value
 			 * as a double.
 			 * 
 			 * If the key is not into the settings HashTable, or the key
@@ -117,12 +150,14 @@ namespace OpenboxPlugin {
 			 * null.
 			*/
 			
-			double result = 0.0;
-			if (settings.contains(key) && double.try_parse(settings.get(key), out result)) {
-				return result;
-			} else {
+			if (!this.enabled) return null;
+			
+			LibConfig.Setting setting = this.configuration_object.lookup(key);
+			
+			if (setting != null)
+				return setting.get_float();
+			else
 				return null;
-			}
 		}
 		
 		public void dump(Settings settings) {
@@ -136,90 +171,6 @@ namespace OpenboxPlugin {
 			}
 			*/
 			
-		}
-		
-		private string? read_line_from_stream(DataInputStream stream) throws IOError {
-			/**
-			 * Convenience method to read a string without cluttering too
-			 * much the while loop used to populate the HashTable.
-			*/
-			
-			string line;
-			//line = stream.read_until(";", null, null);
-			//line = stream.read_line_utf8(null);
-			line = stream.read_line(null);
-			
-			if (line == null)
-				return null;
-						
-			line = line.replace(" ","").replace("\r","").replace("\"","");
-			
-			if (line.has_prefix("#")) {
-				return "";
-			} else if (!line.has_suffix(";")) {
-				/*
-				 * line doesn't end with ;, so we will read the next
-				 * line and append it to the one we have read here.
-				 * 
-				 * NOTE: Some complex settings like
-				 * wintypes:
-				 * {
-				 *   tooltip = { fade = true; shadow = false; opacity = 0.75; };
-				 * };
-				 * 
-				 * will not work and will only create some useless keys
-				 * in the HashTable, but we aren't going to support them
-				 * (and neither did paranoid) so we can take the risk.
-				 * 
-				 * This entire file is pretty hacky, by the way.
-				*/
-				
-				string _new = this.read_line_from_stream(stream);
-				if (_new != null)
-					line += _new;
-			} else {
-				line = line.replace(";","");
-			}
-						
-			return line;
-		}
-		
-		public void reload() {
-			/**
-			 * Reloads the configuration file.
-			*/
-			
-			// Clean
-			this.settings.remove_all();
-			
-			// Open file
-			File file = File.new_for_path(this.configuration_file);
-			
-			if (!file.query_exists()) {
-				// Uh oh
-				warning("compton configuration file %s not found!", this.configuration_file);
-				return;
-			}
-			
-			// Populate the HashTable
-			try {
-				DataInputStream stream = new DataInputStream(file.read());
-				
-				string line;
-				string[] splt;
-				while ((line = read_line_from_stream(stream)) != null) {
-										
-					splt = line.split("=");
-					
-					if (line == "" || splt[1] == null)
-						continue;
-					
-					this.settings.insert(splt[0], splt[1]);
-					message("Inserted %s. (value %s)", splt[0], splt[1]);
-				}
-			} catch (Error e) {
-				warning("Unable to read the compton configuration file.");
-			}
 		}
 	}
 			
