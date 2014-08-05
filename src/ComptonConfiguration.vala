@@ -54,6 +54,29 @@ namespace OpenboxPlugin {
 			this.reload();
 			
 		}
+		
+		public LibConfig.Setting lookup_or_create(string key, LibConfig.SettingType type) {
+			/**
+			 * Lookups for the key, and if it doesn't exist, it creates
+			 * a new one.
+			 * 
+			 * It returns the found (or newly created) key or, if an
+			 * error occurred, null.
+			*/
+			
+			LibConfig.Setting result = this.configuration_object.lookup(key);
+			
+			if (result == null) {
+				/* Not found */
+				result = this.configuration_object.get_root_setting().add(
+					key,
+					type
+				);
+			}
+			
+			return result;
+			
+		}
 
 		public void reload() {
 			/**
@@ -66,9 +89,9 @@ namespace OpenboxPlugin {
 				Environment.get_home_dir()
 			);
 						
-			if (!this.configuration_object.read_file(this.configuration_file)) {
+			if (!this.configuration_object.read_file(configuration_file)) {
 				/* Error */
-				warning("Unable to read compton configuration file %s.", this.configuration_file);
+				warning("Unable to read compton configuration file %s.", configuration_file);
 				this.enabled = false;
 				
 				return;
@@ -83,9 +106,7 @@ namespace OpenboxPlugin {
 			 * Reads the key, and returns its value
 			 * as a boolean.
 			 * 
-			 * If the key is not into the settings HashTable, or the key
-			 * is not associated with a boolean, this method will return
-			 * null.
+			 * If the key doesn't exists, it'll return null.
 			*/
 			
 			if (!this.enabled) return null;
@@ -98,12 +119,25 @@ namespace OpenboxPlugin {
 				return null;
 		}
 		
+		public void set_bool(string key, bool value) {
+			/**
+			 * Stores the value in the configuration file.
+			*/
+			
+			if (!this.enabled) return;
+			
+			LibConfig.Setting setting = this.lookup_or_create(key, LibConfig.SettingType.BOOL);
+			
+			if (!(setting != null && setting.set_bool(value))) {
+				warning("Unable to set key %s in the compton configuration file.", key);
+			}
+		}
+		
 		public string? get_string(string key) {
 			/**
 			 * Reads the key, and returns its value.
 			 * 
-			 * If the key is not into the settings HashTable, this method
-			 * will return null.
+			 * If the key doesn't exists, it'll return null.
 			*/
 			
 			if (!this.enabled) return null;
@@ -115,19 +149,27 @@ namespace OpenboxPlugin {
 			else
 				return null;
 		}
-		
+
+		public void set_string(string key, string value) {
+			/**
+			 * Stores the value in the configuration file.
+			*/
+			
+			if (!this.enabled) return;
+			
+			LibConfig.Setting setting = this.lookup_or_create(key, LibConfig.SettingType.STRING);
+			
+			if (!(setting != null && setting.set_string(value))) {
+				warning("Unable to set key %s in the compton configuration file.", key);
+			}
+		}	
+
 		public int? get_int(string key) {
 			/**
 			 * Reads the key, and returns its value
 			 * as an integer.
 			 * 
-			 * If the key is not into the settings HashTable this method
-			 * will return null.
-			 * 
-			 * If the key is not associated to an integer, it will return
-			 * 0. This is unfortunately a limit of the gint type.
-			 * Please ensure that you're actually reading an integer
-			 * before using this method.
+			 * If the key doesn't exists, it'll return null.
 			*/
 			
 			if (!this.enabled) return null;
@@ -139,15 +181,28 @@ namespace OpenboxPlugin {
 			else
 				return null;
 		}
+
+		public void set_int(string key, int value) {
+			/**
+			 * Stores the value in the configuration file.
+			*/
+			
+			if (!this.enabled) return;
+			
+			LibConfig.Setting setting = this.lookup_or_create(key, LibConfig.SettingType.INT);
+			
+			if (!(setting != null && setting.set_int(value))) {
+				warning("Unable to set key %s in the compton configuration file.", key);
+			}
+		}
+		
 		
 		public double? get_double(string key) {
 			/**
 			 * Reads the key, and returns its value
 			 * as a double.
 			 * 
-			 * If the key is not into the settings HashTable, or the key
-			 * is not associated with a double, this method will return
-			 * null.
+			 * If the key doesn't exists, it'll return null.
 			*/
 			
 			if (!this.enabled) return null;
@@ -159,18 +214,42 @@ namespace OpenboxPlugin {
 			else
 				return null;
 		}
+
+		public void set_double(string key, double value) {
+			/**
+			 * Stores the value in the configuration file.
+			*/
+			
+			if (!this.enabled) return;
+			
+			LibConfig.Setting setting = this.lookup_or_create(key, LibConfig.SettingType.FLOAT);
+			
+			if (!(setting != null && setting.set_float((float)value))) {
+				warning("Unable to set key %s in the compton configuration file.", key);
+			}
+		}
 		
-		public void dump(Settings settings) {
+		
+		public void dump() {
 			/**
 			 * Writes the new configuration in the configuration_file.
 			*/
 			
-			/*
-			foreach (string key in settings.list_keys()) {
-				message("%s %s", key, settings.get_string(key));
-			}
-			*/
+			if (!this.enabled) return;
 			
+			/* There aren't methods in vala to expand user's path. WTF */
+			configuration_file = this.configuration_file.replace(
+				"~",
+				Environment.get_home_dir()
+			);
+						
+			if (!this.configuration_object.write_file(configuration_file)) {
+				/* Error */
+				warning("Unable to write to the compton configuration file %s.", configuration_file);
+				
+				return;
+			}
+						
 		}
 	}
 			

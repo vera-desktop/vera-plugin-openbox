@@ -23,6 +23,8 @@
 [CCode (cprefix = "", lower_case_cprefix = "", cheader_filename = "libconfig.h")]
 namespace LibConfig {
 	
+	[CCode (cname = "int", cprefix = "CONFIG_TYPE_", has_type_id = false)]
+	[Flags]
 	public enum SettingType {
 		NONE = 0,
 		GROUP = 1,
@@ -48,7 +50,7 @@ namespace LibConfig {
 		public bool write_file(string filename);
 		
 		[CCode (cname = "config_root_setting")]
-		public Setting root_setting();
+		public Setting get_root_setting();
 		
 		[CCode (cname = "config_lookup")]
 		public Setting lookup(string path);
@@ -64,6 +66,9 @@ namespace LibConfig {
 		
 		[CCode (cname = "config_setting_parent")]
 		public Setting get_parent();
+		
+		[CCode (cname = "config_setting_add")]
+		public Setting add(string name, SettingType type);
 		
 		[CCode (cname = "config_setting_is_root")]
 		public bool is_root();

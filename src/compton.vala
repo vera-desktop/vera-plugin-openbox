@@ -99,18 +99,26 @@ namespace OpenboxPlugin {
 				case "s":
 					// String
 					new_variant = new Variant("(ss)", new_key, val.get_string());
+					this.compton_settings.set_string(key, val.get_string());
+					
 					break;
 				case "b":
 					// Boolean
 					new_variant = new Variant("(sb)", new_key, val.get_boolean());
+					this.compton_settings.set_bool(key, val.get_boolean());
+					
 					break;
 				case "d":
 					// Double
 					new_variant = new Variant("(sd)", new_key, val.get_double());
+					this.compton_settings.set_double(key, val.get_double());
+					
 					break;
 				case "i":
 					// int32
 					new_variant = new Variant("(si)", new_key, val.get_int32());
+					this.compton_settings.set_int(key, val.get_int32());
+					
 					break;
 				default:
 					// Breaking
@@ -118,8 +126,16 @@ namespace OpenboxPlugin {
 					return;
 			}
 			
+			/* Write changes */
+			this.compton_settings.dump();
 			
-			this.compton_proxy.call_sync("opts_set", new_variant, DBusCallFlags.NONE, 1000, null);
+			try {
+				this.compton_proxy.call_sync("opts_set", new_variant, DBusCallFlags.NONE, 1000, null);
+			} catch (Error e) {
+				/* Unable to set via DBus, reload */
+				
+				// FIXME
+			}
 			
 			/*
 			if (!compton.call_sync("opts_set", new_variant, DBusCallFlags.NONE, 1000, null).get_boolean()) {
@@ -207,10 +223,7 @@ namespace OpenboxPlugin {
 			
 			// Syncronize dconf with the compton.conf
 			this.syncronize_dconf();
-			
-			
-			this.compton_settings.dump(this.settings);
-			
+						
 			// Ensure we are aware when settings change...
 			this.settings.changed.connect(this.on_settings_changed);
 			
