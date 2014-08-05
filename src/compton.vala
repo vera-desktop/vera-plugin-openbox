@@ -33,6 +33,8 @@
  * redirected_force
 */
 
+using Vera;
+
 namespace OpenboxPlugin {
 
 	public class Compton : Object {
@@ -53,6 +55,35 @@ namespace OpenboxPlugin {
 		private ComptonConfiguration compton_settings;
 		private DBusProxy compton_proxy;
 		
+		private Launcher compton_launcher;
+		private Pid? compton_pid = null;
+		
+		private void launch_compton(string configuration_file_) {
+			/**
+			 * Launches compton.
+			*/
+
+			string configuration_file = configuration_file_.replace(
+				"~",
+				Environment.get_home_dir()
+			);
+			
+			/* FIXME: Enable respawn */
+			
+			this.compton_launcher = new Launcher(
+				{ "compton", "--dbus", "--config", configuration_file },
+				false,
+				false
+			);
+			
+			try {
+				this.compton_pid = this.compton_launcher.launch();
+			} catch (Error e) {
+				warning("Unable to launch compton!");
+			}
+			
+		}
+		
 		private void on_settings_changed(string key) {
 			/**
 			 * Fired when a setting has been changed.
@@ -64,7 +95,15 @@ namespace OpenboxPlugin {
 			if (key == "enable-visual-effects") {
 				// Enable visual effects.
 				
-				// TODO: Should really put something here.
+				if (this.settings.get_boolean("enable-visual-effects") && this.compton_pid == null) {
+					this.launch_compton(this.settings.get_string("configuration-file"));
+				} else {
+					Posix.kill(this.compton_pid, Posix.SIGTERM);
+					Process.close_pid(this.compton_pid);
+					
+					this.compton_pid = null;
+				}
+				
 				return;
 			} else if (key == "configuration-file") {
 				// Configuration file.
@@ -288,18 +327,29 @@ namespace OpenboxPlugin {
 			
 			// Syncronize dconf with the compton.conf
 			this.syncronize_dconf(initial_setup);
+			
+			/* Launch! */
+			if (this.settings.get_boolean("enable-visual-effects"))
+				this.launch_compton(configuration_file);
 						
 			// Ensure we are aware when settings change...
 			this.settings.changed.connect(this.on_settings_changed);
 			
-			this.compton_proxy = new DBusProxy.for_bus_sync(
-				BusType.SESSION,
-				DBusProxyFlags.NONE,
-				null,
-				"com.github.chjj.compton." + DISPLAY,
-				"/",
-				"com.github.chjj.compton",
-				null
+			Timeout.add_seconds(
+				2,
+				() => {
+					this.compton_proxy = new DBusProxy.for_bus_sync(
+						BusType.SESSION,
+						DBusProxyFlags.NONE,
+						null,
+						"com.github.chjj.compton." + DISPLAY,
+						"/",
+						"com.github.chjj.compton",
+						null
+					);
+					
+					return false;
+				}
 			);
 		}
 		
