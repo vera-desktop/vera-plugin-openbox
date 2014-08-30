@@ -172,8 +172,7 @@ namespace OpenboxPlugin {
 				this.compton_proxy.call_sync("opts_set", new_variant, DBusCallFlags.NONE, 1000, null);
 			} catch (Error e) {
 				/* Unable to set via DBus, reload */
-				
-				// FIXME
+				this.compton_proxy.call_sync("reset", null, DBusCallFlags.NONE, 1000, null);
 			}
 			
 			/*
