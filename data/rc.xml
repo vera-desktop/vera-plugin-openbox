@@ -318,22 +318,22 @@ running on Semplice Linux.
     <!-- Keybindings for multimedia keys -->
     <keybind key="XF86AudioNext">
       <action name="Execute">
-        <execute>exaile --next</execute>
+        <execute>pragha --next</execute>
       </action>
     </keybind>
     <keybind key="XF86AudioPrev">
       <action name="Execute">
-        <execute>exaile --prev</execute>
+        <execute>pragha --prev</execute>
       </action>
     </keybind>
     <keybind key="XF86AudioPlay">
       <action name="Execute">
-        <execute>exaile --play-pause</execute>
+        <execute>pragha --pause</execute>
       </action>
     </keybind>
     <keybind key="XF86AudioStop">
       <action name="Execute">
-        <execute>exaile --stop</execute>
+        <execute>pragha --stop</execute>
       </action>
     </keybind>
   </keyboard>
