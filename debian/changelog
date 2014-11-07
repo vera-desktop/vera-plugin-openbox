@@ -1,3 +1,11 @@
+vera-plugin-openbox (0.27-1) devel; urgency=medium
+
+  * rc.xml: adapted the keybindings for pragha.
+  * rc.xml: style changes in preparation for numb-preview
+  * debian/control: switch to valac-0.26.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 07 Nov 2014 20:35:34 +0100
+
 vera-plugin-openbox (0.26-1) devel; urgency=medium
 
   * Actually reload compton if we can't update its configuration on-the-fly
