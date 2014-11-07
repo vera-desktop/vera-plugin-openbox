@@ -38,7 +38,7 @@ running on Semplice Linux.
        the active window is -->
   </placement>
   <theme>
-    <name>SempliceNight</name>
+    <name>Zukitre-Vera</name>
     <titleLayout>NLIMC</titleLayout>
     <!--
       available characters are NDSLIMC, each can occur at most once.
@@ -53,8 +53,8 @@ running on Semplice Linux.
     <keepBorder>yes</keepBorder>
     <animateIconify>no</animateIconify>
     <font place="ActiveWindow">
-      <name>Open Sans</name>
-      <size>9</size>
+      <name>Open Sans Bold</name>
+      <size>10</size>
       <!-- font size in points -->
       <weight>normal</weight>
       <!-- 'bold' or 'normal' -->
@@ -62,8 +62,8 @@ running on Semplice Linux.
       <!-- 'italic' or 'normal' -->
     </font>
     <font place="InactiveWindow">
-      <name>Open Sans</name>
-      <size>9</size>
+      <name>Open Sans Bold</name>
+      <size>10</size>
       <!-- font size in points -->
       <weight>normal</weight>
       <!-- 'bold' or 'normal' -->
