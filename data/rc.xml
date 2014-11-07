@@ -38,7 +38,7 @@ running on Semplice Linux.
        the active window is -->
   </placement>
   <theme>
-    <name>SempliceNight</name>
+    <name>Zukitre-Vera</name>
     <titleLayout>NLIMC</titleLayout>
     <!--
       available characters are NDSLIMC, each can occur at most once.
@@ -53,8 +53,8 @@ running on Semplice Linux.
     <keepBorder>yes</keepBorder>
     <animateIconify>no</animateIconify>
     <font place="ActiveWindow">
-      <name>Open Sans</name>
-      <size>9</size>
+      <name>Open Sans Bold</name>
+      <size>10</size>
       <!-- font size in points -->
       <weight>normal</weight>
       <!-- 'bold' or 'normal' -->
@@ -62,8 +62,8 @@ running on Semplice Linux.
       <!-- 'italic' or 'normal' -->
     </font>
     <font place="InactiveWindow">
-      <name>Open Sans</name>
-      <size>9</size>
+      <name>Open Sans Bold</name>
+      <size>10</size>
       <!-- font size in points -->
       <weight>normal</weight>
       <!-- 'bold' or 'normal' -->
@@ -318,22 +318,22 @@ running on Semplice Linux.
     <!-- Keybindings for multimedia keys -->
     <keybind key="XF86AudioNext">
       <action name="Execute">
-        <execute>exaile --next</execute>
+        <execute>pragha --next</execute>
       </action>
     </keybind>
     <keybind key="XF86AudioPrev">
       <action name="Execute">
-        <execute>exaile --prev</execute>
+        <execute>pragha --prev</execute>
       </action>
     </keybind>
     <keybind key="XF86AudioPlay">
       <action name="Execute">
-        <execute>exaile --play-pause</execute>
+        <execute>pragha --pause</execute>
       </action>
     </keybind>
     <keybind key="XF86AudioStop">
       <action name="Execute">
-        <execute>exaile --stop</execute>
+        <execute>pragha --stop</execute>
       </action>
     </keybind>
   </keyboard>
