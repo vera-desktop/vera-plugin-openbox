@@ -114,6 +114,14 @@ namespace OpenboxPlugin {
 					);
 										
 					ChildWatch.add(pid, this.on_process_terminated);
+					
+					/*
+					 * Wait half a second so that openbox can get
+					 * ownership of the session.
+					 * FIXME: We shouldn't do that and rely on events
+					 * instead. See vera bug #1.
+					*/
+					Thread.usleep(500000);
 				} catch (SpawnError e) {
 					warning(e.message);
 				}
