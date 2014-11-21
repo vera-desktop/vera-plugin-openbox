@@ -53,8 +53,8 @@ running on Semplice Linux.
     <keepBorder>yes</keepBorder>
     <animateIconify>no</animateIconify>
     <font place="ActiveWindow">
-      <name>Open Sans Bold</name>
-      <size>10</size>
+      <name>Open Sans</name>
+      <size>11</size>
       <!-- font size in points -->
       <weight>normal</weight>
       <!-- 'bold' or 'normal' -->
@@ -62,8 +62,8 @@ running on Semplice Linux.
       <!-- 'italic' or 'normal' -->
     </font>
     <font place="InactiveWindow">
-      <name>Open Sans Bold</name>
-      <size>10</size>
+      <name>Open Sans</name>
+      <size>11</size>
       <!-- font size in points -->
       <weight>normal</weight>
       <!-- 'bold' or 'normal' -->
@@ -72,7 +72,7 @@ running on Semplice Linux.
     </font>
     <font place="MenuHeader">
       <name>Open Sans</name>
-      <size>9</size>
+      <size>10</size>
       <!-- font size in points -->
       <weight>normal</weight>
       <!-- 'bold' or 'normal' -->
@@ -81,7 +81,7 @@ running on Semplice Linux.
     </font>
     <font place="MenuItem">
       <name>Open Sans</name>
-      <size>9</size>
+      <size>10</size>
       <!-- font size in points -->
       <weight>normal</weight>
       <!-- 'bold' or 'normal' -->
@@ -90,7 +90,7 @@ running on Semplice Linux.
     </font>
     <font place="ActiveOnScreenDisplay">
       <name>Open Sans</name>
-      <size>9</size>
+      <size>10</size>
       <!-- font size in points -->
       <weight>normal</weight>
       <!-- 'bold' or 'normal' -->
@@ -99,7 +99,7 @@ running on Semplice Linux.
     </font>
     <font place="InactiveOnScreenDisplay">
       <name>Open Sans</name>
-      <size>9</size>
+      <size>10</size>
       <!-- font size in points -->
       <weight>normal</weight>
       <!-- 'bold' or 'normal' -->
