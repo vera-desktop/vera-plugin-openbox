@@ -8,7 +8,7 @@
 	dh $@ --with python3
 
 override_dh_auto_configure:
-	bake --configure install-directory=debian/tmp resource-directory=debian/tmp/usr
+	bake --configure install-directory=debian/tmp
 
 override_dh_python3:
 	dh_python3 --no-guessing-deps
