@@ -1,3 +1,9 @@
+vera-plugin-openbox (0.29.3-2) devel; urgency=medium
+
+  * debian/rules: use absolute path for install-directory.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 03 Feb 2015 22:52:30 +0100
+
 vera-plugin-openbox (0.29.3-1) devel; urgency=medium
 
   * src/vera-color/Recipe: do not chmod the exeutable at all.
