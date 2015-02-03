@@ -1,3 +1,10 @@
+vera-plugin-openbox (0.29.3-1) devel; urgency=medium
+
+  * src/vera-color/Recipe: do not chmod the exeutable at all.
+  * debian/rules: chmod +x openbox-vera-color.pyc.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 03 Feb 2015 22:27:47 +0100
+
 vera-plugin-openbox (0.29.2-1) devel; urgency=medium
 
   * src/vera-color/Recipe: chmod the target, not the symlink.
