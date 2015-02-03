@@ -1,3 +1,10 @@
+vera-plugin-openbox (0.29-1) devel; urgency=medium
+
+  * Support vera-color in Openbox themes by using the newly introduced openbox-vera-color script.
+  * debian/: added new vera-plugin-openbox-vera-color package
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 03 Feb 2015 20:25:23 +0100
+
 vera-plugin-openbox (0.28-1) devel; urgency=medium
 
   * data/rc.xml: font size changes
