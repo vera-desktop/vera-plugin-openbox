@@ -1,4 +1,4 @@
-vera-plugin-openbox (0.29.1-1) devel; urgency=medium
+vera-plugin-openbox (0.29.2-1) devel; urgency=medium
 
   * src/vera-color/Recipe: chmod the target, not the symlink.
 
