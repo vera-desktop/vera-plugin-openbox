@@ -1,3 +1,10 @@
+vera-plugin-openbox (0.29-2) devel; urgency=medium
+
+  * debian/vera-plugin-openbox-vera-color.install: ship watcher configuration
+  * debian/: do not use pybuild as we use bake.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 03 Feb 2015 20:28:00 +0100
+
 vera-plugin-openbox (0.29-1) devel; urgency=medium
 
   * Support vera-color in Openbox themes by using the newly introduced openbox-vera-color script.
