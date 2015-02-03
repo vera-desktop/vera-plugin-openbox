@@ -1,3 +1,10 @@
+vera-plugin-openbox (0.29.4-1) devel; urgency=medium
+
+  * updated gitignore.
+  * src/vera-color/Recipe: do not symlink with the install-directory.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 03 Feb 2015 23:45:27 +0100
+
 vera-plugin-openbox (0.29.3-2) devel; urgency=medium
 
   * debian/rules: use absolute path for install-directory.
