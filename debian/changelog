@@ -1,3 +1,10 @@
+vera-plugin-openbox (0.29.1-1) devel; urgency=medium
+
+  * src/vera-color/Recipe: take into consideration the install-directory when manually creating the links.
+  * Revert "debian/rules: configure resource-directory to avoid build failures."
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 03 Feb 2015 21:08:31 +0100
+
 vera-plugin-openbox (0.29-3) devel; urgency=medium
 
   * debian/rules: configure resource-directory to avoid build failures.
