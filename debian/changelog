@@ -1,3 +1,9 @@
+vera-plugin-openbox (0.29-3) devel; urgency=medium
+
+  * debian/rules: configure resource-directory to avoid build failures.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 03 Feb 2015 20:45:07 +0100
+
 vera-plugin-openbox (0.29-2) devel; urgency=medium
 
   * debian/vera-plugin-openbox-vera-color.install: ship watcher configuration
