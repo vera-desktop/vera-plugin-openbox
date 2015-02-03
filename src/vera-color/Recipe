@@ -36,7 +36,7 @@ programs.vera-color {
 
 %install : vera-color
 	mkdir -p $(options.install-directory)/$(options.binary-directory)
-	ln -sf $(options.install-directory)/$(options.project-data-directory)/openbox-vera-color.pyc $(options.install-directory)/$(options.binary-directory)/openbox-vera-color
+	ln -sf $(options.project-data-directory)/openbox-vera-color.pyc $(options.install-directory)/$(options.binary-directory)/openbox-vera-color
 
 %uninstall : vera-color
 	rm $(options.install-directory)/$(options.binary-directory)/openbox-vera-color
