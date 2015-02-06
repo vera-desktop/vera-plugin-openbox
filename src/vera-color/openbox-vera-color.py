@@ -27,6 +27,10 @@ import xml.etree.ElementTree as etree
 
 from gi.repository import Gio, Gdk
 
+# First time? Remove trigger for the next one
+if os.path.exists(os.path.expanduser("~/.config/autostart/first-time-openbox-vera-color.desktop")):
+	os.remove(os.path.expanduser("~/.config/autostart/first-time-openbox-vera-color.desktop"))
+
 OPENBOX_CONFIGURATION = os.path.expanduser("~/.config/vera/openbox/rc.xml")
 namespaces = {"ob":"http://openbox.org/3.5/rc"}
 
