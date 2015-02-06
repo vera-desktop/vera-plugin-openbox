@@ -1,3 +1,10 @@
+vera-plugin-openbox (0.30-1) unstable; urgency=medium
+
+  * vera-color: rebuild the Openbox theme if the session has been started for the first time.
+  * debian/vera-plugin-openbox-vera-color.install: ship etc/skel.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 06 Feb 2015 18:03:04 +0100
+
 vera-plugin-openbox (0.29.4-1) devel; urgency=medium
 
   * updated gitignore.
