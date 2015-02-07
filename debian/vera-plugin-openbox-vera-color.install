@@ -1,4 +1,5 @@
 usr/bin
 usr/share/vera-plugin-openbox/*.pyc
+usr/share/vera-plugin-openbox/*.py
 etc/alan
 etc/skel
