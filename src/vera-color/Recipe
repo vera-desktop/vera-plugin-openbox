@@ -31,12 +31,13 @@
 programs.vera-color {
 	sources = openbox-vera-color.py
 	# This is workarounded later
+	install-sources = true
 	install-directory = /tmp
 }
 
 %install : vera-color
 	mkdir -p $(options.install-directory)/$(options.binary-directory)
-	ln -sf $(options.project-data-directory)/openbox-vera-color.pyc $(options.install-directory)/$(options.binary-directory)/openbox-vera-color
+	ln -sf $(options.project-data-directory)/openbox-vera-color.py $(options.install-directory)/$(options.binary-directory)/openbox-vera-color
 
 %uninstall : vera-color
 	rm $(options.install-directory)/$(options.binary-directory)/openbox-vera-color

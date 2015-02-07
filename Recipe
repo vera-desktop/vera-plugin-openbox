@@ -21,6 +21,6 @@
 
 project {
 	name = vera-plugin-openbox
-	version = 0.30.0
+	version = 0.30.1
 	minimum-bake-version = 0.1
 }
