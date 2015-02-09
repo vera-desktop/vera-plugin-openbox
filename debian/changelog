@@ -1,3 +1,11 @@
+vera-plugin-openbox (0.30.2-1) unstable; urgency=medium
+
+  * vera-color: fallback to generic the Openbox configuration file
+    installed by this very same plugin if there isn't an user-specific
+    configuration file.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Mon, 09 Feb 2015 18:57:46 +0100
+
 vera-plugin-openbox (0.30.1-1) unstable; urgency=medium
 
   * vera-color: install the python source too.
