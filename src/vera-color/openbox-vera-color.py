@@ -31,7 +31,12 @@ from gi.repository import Gio, Gdk
 if os.path.exists(os.path.expanduser("~/.config/autostart/first-time-openbox-vera-color.desktop")):
 	os.remove(os.path.expanduser("~/.config/autostart/first-time-openbox-vera-color.desktop"))
 
-OPENBOX_CONFIGURATION = os.path.expanduser("~/.config/vera/openbox/rc.xml")
+# If first time, the openbox configuration could not have been copied to the home directory.
+# If that's the case, we'll get the current theme by looking at the generic configuration file
+if os.path.exists(os.path.expanduser("~/.config/vera/openbox/rc.xml")):
+	OPENBOX_CONFIGURATION = os.path.expanduser("~/.config/vera/openbox/rc.xml")
+else:
+	OPENBOX_CONFIGURATION = "/usr/share/vera-plugin-openbox/rc.xml"
 namespaces = {"ob":"http://openbox.org/3.5/rc"}
 
 # Open openbox configuration
