@@ -53,15 +53,20 @@ except:
 if Gio.SettingsSchemaSource.get_default().lookup("org.semplicelinux.vera.desktop", True) == None:
 	raise Exception("Schema org.semplicelinux.vera.desktop not available.")
 
-vera_color = Gio.Settings("org.semplicelinux.vera.desktop").get_string("vera-color")
-rgba = Gdk.RGBA()
-rgba.parse(vera_color)
-# http://wrhansen.blogspot.it/2012/09/how-to-convert-gdkrgba-to-hex-string-in.html
-vera_color = "#{0:02x}{1:02x}{2:02x}".format(
-	int(rgba.red*255),
-	int(rgba.green*255),
-	int(rgba.blue*255)
-)
+settings = Gio.Settings("org.semplicelinux.vera.desktop")
+vera_color_enabled = settings.get_boolean("vera-color-enabled")
+if vera_color_enabled:
+	vera_color = settings.get_string("vera-color")
+	rgba = Gdk.RGBA()
+	rgba.parse(vera_color)
+	# http://wrhansen.blogspot.it/2012/09/how-to-convert-gdkrgba-to-hex-string-in.html
+	vera_color = "#{0:02x}{1:02x}{2:02x}".format(
+		int(rgba.red*255),
+		int(rgba.green*255),
+		int(rgba.blue*255)
+	)
+else:
+	vera_color = "#000000"
 
 # Now that we have the theme name, we should search for the base theme
 found = False
@@ -89,7 +94,20 @@ if path.startswith("/usr/share/themes"):
 # Write changes
 content = []
 with open(os.path.join(path, "themerc.vera-color-base"), "r") as f:
-	content = f.readlines()
+	if vera_color_enabled:
+		content = f.readlines()
+	else:
+		# If not vera_color_enabled, we should search for the default
+		# vera-color comment
+		for line in f.readlines():
+			if line.startswith("# @vera-color-default"):
+				# Yay!
+				vera_color = line.split(" ")[-1]
+				if not vera_color.startswith("#"):
+					# Safety check
+					vera_color = "#000000"
+			
+			content.append(line)
 
 with open(os.path.join(path, "themerc"), "w") as f:
 	for line in content:
