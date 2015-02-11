@@ -1,3 +1,11 @@
+vera-plugin-openbox (0.31.0-1) unstable; urgency=medium
+
+  * vera-color: use the default vera-color specified in the base theme if vera-color-enabled is false.
+  * vera-color: when copying the theme from /usr/share/themes, ensure to symlink the .vera-color-base file.
+  * vera-color (watcher): react on vera-color-enabled changes.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 11 Feb 2015 20:57:12 +0100
+
 vera-plugin-openbox (0.30.2-1) unstable; urgency=medium
 
   * vera-color: fallback to generic the Openbox configuration file
