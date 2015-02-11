@@ -89,6 +89,11 @@ if path.startswith("/usr/share/themes"):
 	if not os.path.exists(finalpath.replace("/openbox-3","")):
 		os.makedirs(finalpath.replace("/openbox-3",""))
 	shutil.copytree(path, finalpath)
+	# Overwrite the vera-color-base file with a symlink to the one in /usr/share/themes,
+	# to ensure that the theme is up-to-date.
+	dest = os.path.join(finalpath, "themerc.vera-color-base")
+	os.remove(dest)
+	os.symlink(os.path.join(path, "themerc.vera-color-base"), dest)
 	path = finalpath
 
 # Write changes
