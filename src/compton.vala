@@ -58,6 +58,9 @@ namespace OpenboxPlugin {
 		private Launcher compton_launcher;
 		private Pid? compton_pid = null;
 		
+		private uint queue_timeout = 0;
+		private HashTable<string, Variant> queue = new HashTable<string, Variant>(str_hash, str_equal);
+		
 		private void launch_compton(string configuration_file_) {
 			/**
 			 * Launches compton.
@@ -115,6 +118,68 @@ namespace OpenboxPlugin {
 				return;
 			}
 			
+			/* Add to queue */
+			this.queue.set(key, this.settings.get_value(key));
+			
+			/* Add timer */
+			if (this.queue_timeout > 0) {
+				/* Timeout is already present, we should cancel it and add another */
+				Source.remove(this.queue_timeout);
+			}
+			this.queue_timeout = Timeout.add(700, this.on_queue_timeout_elapsed);
+		
+		}
+		
+		private bool on_queue_timeout_elapsed() {
+			/**
+			 * Fired when the queue timeout has been elapsed and we thus
+			 * need to apply the settings
+			*/
+			
+			bool reset = false;
+			
+			lock (this.compton_settings) {
+			
+				this.queue.foreach_remove(
+					(key, value) => {
+						/* Apply */
+						if (this.apply_setting(key, value)) {
+							reset = true;
+						}
+						
+						return true; /* remove */
+					}
+				);
+				
+				/* Dump, finally */
+				this.compton_settings.dump();
+				
+			}
+			
+			if (reset) {
+				try {
+					this.compton_proxy.call_sync("reset", null, DBusCallFlags.NONE, 1000, null);
+				} catch (Error e) {
+					warning("Unable to reset compton.");
+				}
+			}
+			
+			/* Reset timeout to 0, the source will be removed automatically by GLib */
+			this.queue_timeout = 0;
+			
+			return false;
+		}
+		
+		private bool apply_setting(string key, Variant val) {
+			/**
+			 * Applies the settings to compton.
+			 * The setting will be stored in memory into the ComptonConfiguration
+			 * object and eventually set via DBus if the given setting supports
+			 * it.
+			 * 
+			 * Returns True if a compton reset is necessary, False if not.
+			*/
+			
 			/*
 			 * We need to create a new Variant composed of the key and
 			 * the value.
@@ -125,10 +190,7 @@ namespace OpenboxPlugin {
 			 * I'm sure there is a better way to do this, but I haven't
 			 * found one yet.
 			*/
-			Variant val, new_variant;
-			val = this.settings.get_value(key);
-			
-			message("Processing %s", key);
+			Variant new_variant;
 			
 			// Properties have underscores instead of a dash
 			string new_key = key.replace("-","_");
@@ -162,26 +224,17 @@ namespace OpenboxPlugin {
 				default:
 					// Breaking
 					message("Returning...");
-					return;
+					return false;
 			}
-			
-			/* Write changes */
-			this.compton_settings.dump();
 			
 			try {
 				this.compton_proxy.call_sync("opts_set", new_variant, DBusCallFlags.NONE, 1000, null);
 			} catch (Error e) {
-				/* Unable to set via DBus, reload */
-				this.compton_proxy.call_sync("reset", null, DBusCallFlags.NONE, 1000, null);
+				/* Tell caller that a reload is necessary */
+				return true;
 			}
 			
-			/*
-			if (!compton.call_sync("opts_set", new_variant, DBusCallFlags.NONE, 1000, null).get_boolean()) {
-				warning("Unable to set property %s", key);
-			} else {
-				message("Set %s!", key);
-			}
-			*/
+			return false;
 		}
 		
 		private void syncronize_dconf(bool reverse = false) {
