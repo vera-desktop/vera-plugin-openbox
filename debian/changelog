@@ -1,3 +1,10 @@
+vera-plugin-openbox (0.32.0-1) unstable; urgency=medium
+
+  * compton: put the settings to be changed in a delayed queue.
+  * compton: temporairly disable two-way ComptonConfiguration syncronization (text -> dconf).
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Fri, 13 Feb 2015 17:14:51 +0100
+
 vera-plugin-openbox (0.31.0-1) unstable; urgency=medium
 
   * vera-color: use the default vera-color specified in the base theme if vera-color-enabled is false.
