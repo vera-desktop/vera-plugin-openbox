@@ -378,7 +378,9 @@ namespace OpenboxPlugin {
 			this.compton_settings = new ComptonConfiguration(configuration_file);
 			
 			// Syncronize dconf with the compton.conf
-			this.syncronize_dconf(initial_setup);
+			if (initial_setup)
+				/* FIXME: two-way syncronization (initial_setup = false) disabled for now */
+				this.syncronize_dconf(initial_setup);
 			
 			/* Launch! */
 			if (this.settings.get_boolean("enable-visual-effects"))
