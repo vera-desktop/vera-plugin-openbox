@@ -20,6 +20,8 @@
 #
 
 data.schemas {
-    gsettings-schemas = org.semplicelinux.vera.compton.gschema.xml
+    gsettings-schemas = \
+        org.semplicelinux.vera.openbox.gschema.xml \
+        org.semplicelinux.vera.compton.gschema.xml
     gettext-domain = vera
 }

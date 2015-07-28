@@ -29,14 +29,13 @@ namespace OpenboxPlugin {
 		private string HOME = Environment.get_home_dir();
 		
 		/* FIXME: Maybe something configurable? */
-		private string openbox_config_file = Path.build_filename(
-			Environment.get_home_dir(), ".config/vera/openbox", "rc.xml"
-		);
+		private string openbox_config_file;
 
 		public Display display;
 		public Settings settings;
 
 		private Compton compton;
+		private OpenboxConfiguration configuration;
 		
 		private void on_process_terminated(Pid pid, int status) {
 			/**
@@ -55,12 +54,16 @@ namespace OpenboxPlugin {
 			
 			try {
 				this.display = display;
+				this.settings = new Settings("org.semplicelinux.vera.openbox");
+				
+				/* Build the file path */
+				this.openbox_config_file = this.settings.get_string("config-path").replace(
+					"~",
+					HOME
+				);
 				
 				this.compton = new Compton();
-					
-				//this.settings = new Settings("org.semplicelinux.vera.tint2");
-
-				//this.settings.changed.connect(this.on_settings_changed);
+				this.configuration = new OpenboxConfiguration(this.display, this.settings, this.openbox_config_file);
 
 			} catch (Error ex) {
 				error("Unable to load plugin settings.");
