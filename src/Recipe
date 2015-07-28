@@ -24,7 +24,6 @@ libraries.openbox {
 	sources = \
 		openbox.vala \
 		OpenboxConfiguration.vala \
-		XmlFile.vala \
 		ComptonConfiguration.vala \
 		compton.vala
 	vala-compile-flags = --vapidir=../vapis
