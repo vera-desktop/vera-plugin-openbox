@@ -1,3 +1,10 @@
+vera-plugin-openbox (1.10.1-1) unstable; urgency=medium
+
+  * [src] Remove XmlFile.vala, as it's in vera core.
+  * [packaging] Build-depend on vera-desktop >= 1.10.1.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 28 Jul 2015 23:14:32 +0200
+
 vera-plugin-openbox (1.10.0-1) unstable; urgency=medium
 
   * [packaging] Build-depend on valac-0.28.
