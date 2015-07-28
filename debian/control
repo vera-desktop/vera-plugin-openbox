@@ -13,7 +13,7 @@ Vcs-Browser: https://github.com/vera-desktop/vera-plugin-openbox
 
 Package: vera-plugin-openbox
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, vera-desktop (>= 1.10.0), openbox
+Depends: ${shlibs:Depends}, ${misc:Depends}, vera-desktop (>= 1.10.1), openbox
 Recommends: compton
 Description: vera openbox plugin
  vera-openbox-plugin is a vera-desktop plugin that handles communication
