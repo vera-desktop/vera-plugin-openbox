@@ -3,7 +3,7 @@ Section: x11
 Priority: optional
 Maintainer: Eugenio Paolantonio (g7) <me@medesimo.eu>
 Build-Depends: debhelper (>= 8.0.0), build-essential, bake, libvera-dev,
- libvera-vapi, libconfig-dev, libgee-dev, libpeas-dev, libgtk-3-dev, valac-0.28,
+ libvera-vapi, libconfig-dev, libconfig-vapi, libgee-dev, libpeas-dev, libgtk-3-dev, valac-0.28,
  dh-python, python3-all (>= 3.1.2-7~)
 X-Python3-Version: >= 3.2
 Standards-Version: 3.9.5
