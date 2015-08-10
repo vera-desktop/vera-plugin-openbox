@@ -26,7 +26,6 @@ libraries.openbox {
 		OpenboxConfiguration.vala \
 		ComptonConfiguration.vala \
 		compton.vala
-	vala-compile-flags = --vapidir=../vapis
 	compile-flags = -O2 -flto
 	link-flags = -flto -Wl,--as-needed
 	
