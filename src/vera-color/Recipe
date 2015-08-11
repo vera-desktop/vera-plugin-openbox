@@ -30,6 +30,7 @@
 
 programs.vera-color {
 	sources = openbox-vera-color.py
+	python-version = 3
 	# This is workarounded later
 	install-sources = true
 	install-directory = /tmp
