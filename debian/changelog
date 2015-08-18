@@ -1,3 +1,9 @@
+vera-plugin-openbox (0.32.0+jethro0-1) unstable; urgency=medium
+
+  * [compton] Estabilish connection with every setting to ensure that their changed() signal is properly fired.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Tue, 18 Aug 2015 13:31:27 +0200
+
 vera-plugin-openbox (0.32.0-1) unstable; urgency=medium
 
   * compton: put the settings to be changed in a delayed queue.
