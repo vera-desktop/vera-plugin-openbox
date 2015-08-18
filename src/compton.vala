@@ -389,6 +389,18 @@ namespace OpenboxPlugin {
 			// Ensure we are aware when settings change...
 			this.settings.changed.connect(this.on_settings_changed);
 			
+			/*
+			 * FIXME: GSettings doesn't properly report changed settings
+			 * if a connection on them hasn't been estabilished before.
+			 * It's possible to estabilish one by reading every setting
+			 * one-by-one (as we need a callback for every setting).
+			 * 
+			 * BEWARE. It's ugly!
+			*/
+			foreach (string key in this.settings.list_keys()) {
+				Variant val = this.settings.get_value(key);
+			}
+			
 			Timeout.add_seconds(
 				2,
 				() => {
