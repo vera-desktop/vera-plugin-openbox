@@ -16,8 +16,8 @@ override_dh_python3:
 override_dh_auto_build:
 	bake
 
-#override_dh_auto_install:
-#	bake install
+override_dh_auto_install:
+	bake install
 #	chmod +x debian/tmp/usr/share/vera-plugin-openbox/openbox-vera-color.pyc
 
 override_dh_auto_clean:
