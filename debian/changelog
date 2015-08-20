@@ -1,3 +1,13 @@
+vera-plugin-openbox (1.10.2-1) unstable; urgency=medium
+
+  * [Recipe] Remove the need of the custom vapidir.
+  * [gitignore] Ignore Recipe.conf.
+  * [packaging] Build-depend on libconfig-vapi.
+  * [vera-color] Recipe: enforce python3.
+  * [compton] Estabilish connection with every setting to ensure that their changed() signal is properly fired.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Thu, 20 Aug 2015 18:30:33 +0200
+
 vera-plugin-openbox (1.10.1-1) unstable; urgency=medium
 
   * [src] Remove XmlFile.vala, as it's in vera core.
