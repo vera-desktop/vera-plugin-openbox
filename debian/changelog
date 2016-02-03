@@ -1,3 +1,12 @@
+vera-plugin-openbox (1.10.4-1) unstable; urgency=medium
+
+  * [openbox] Drop gee dependency
+  * [README] Remove gee from the dependency list
+  * [packaging] Replace valac-0.28 dependency with valac
+  * [packaging] Drop libgee-dev dependency
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 03 Feb 2016 12:10:20 +0100
+
 vera-plugin-openbox (1.10.3-1) unstable; urgency=medium
 
   * [openbox] Move OpenboxConfiguration object instantiation after initial setup.
