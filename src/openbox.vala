@@ -63,7 +63,6 @@ namespace OpenboxPlugin {
 				);
 				
 				this.compton = new Compton();
-				this.configuration = new OpenboxConfiguration(this.display, this.settings, this.openbox_config_file);
 
 			} catch (Error ex) {
 				error("Unable to load plugin settings.");
@@ -101,7 +100,8 @@ namespace OpenboxPlugin {
 					this.openbox_config_file = "/usr/share/vera-plugin-openbox/rc.xml";
 					
 				}
-				
+
+				this.configuration = new OpenboxConfiguration(this.display, this.settings, this.openbox_config_file);
 				
 				// Launch openbox.
 				Pid pid;
