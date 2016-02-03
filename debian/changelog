@@ -1,3 +1,9 @@
+vera-plugin-openbox (1.10.3-1) unstable; urgency=medium
+
+  * [openbox] Move OpenboxConfiguration object instantiation after initial setup.
+
+ -- Eugenio Paolantonio (g7) <me@medesimo.eu>  Wed, 03 Feb 2016 11:57:56 +0100
+
 vera-plugin-openbox (1.10.2-3) unstable; urgency=medium
 
   * [packaging] Restore the bake install call.
