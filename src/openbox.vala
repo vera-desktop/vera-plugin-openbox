@@ -20,7 +20,6 @@
 */
 
 using Vera;
-using Gee;
 
 namespace OpenboxPlugin {
 
