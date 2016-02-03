@@ -14,7 +14,6 @@ You need:
 * bake
 * gcc
 * gio-2.0
-* gee-1.0
 * libpeas-1.0
 
 To compile vera-plugin-openbox, just execute
